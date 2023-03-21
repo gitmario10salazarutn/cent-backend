@@ -100,6 +100,10 @@ def change_password(id):
     except Exception as ex:
         return jsonify({'message': 'Error {0}'.format(ex)}), 500
 
+# ? Warning it is a warning or info...
+# ! Danger, it is a danger...
+# TODO What is it?
+
 
 @app.route('/')
 def index():
@@ -109,3 +113,8 @@ def index():
 if __name__ == '__main__':
     app.register_error_handler(404, Page_Not_Found)
     app.run(debug=True, host="0.0.0.0")
+
+a = 4 / 5.25
+
+if a >= 1 or a is not 5:
+    print("a")

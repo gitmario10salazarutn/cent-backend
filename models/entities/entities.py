@@ -5,13 +5,17 @@ Created on Fri Mar  3 15:53:57 2023
 @author: Mario
 """
 
+
 class Entity:
 
+    def __init__(self, a) -> None:
+        self.a = a
     # * Important
     # ! Danger
     # ? Should
+
     @classmethod
-    def entityUser(self, user)->dict:
+    def entityUser(self, user) -> dict:
         if dict:
             return {
                 "user": {
@@ -44,8 +48,21 @@ class Entity:
         else:
             return None
 
-
     # TODO
+
     @classmethod
-    def ListUsers(self, users)->list:
+    def ListUsers(self, users) -> list:
         return [self.entityUser(user) for user in users]
+
+
+e = Entity
+
+AC = []
+
+
+class A(e1):
+    def __init__(self, e) -> None:
+        self.e = e1
+
+
+link = "https://cloud2.utn.edu.ec/ords/f?p=128%3ALOGIN_DESKTOP&fbclid=IwAR3lUpdzdn0b8J31pDg3CtOw8VkRmDdDgNM4VyqdNvhOOLBmiHEccGwGU1I"

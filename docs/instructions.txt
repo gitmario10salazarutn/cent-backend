@@ -1,0 +1,1 @@
+pip install flask python-decouple psycopg2-binary python-dotenv Flask-Cors pytest Flask-PyMongo flask-mongoengine PyJWT Flask-Login
