@@ -114,7 +114,11 @@ if __name__ == '__main__':
     app.register_error_handler(404, Page_Not_Found)
     app.run(debug=True, host="0.0.0.0")
 
-a = 4 / 5.25
+    """
+    Buenos días 
+El martes fui para ver si podía ayudarme a matricularme en octavo nivel, ya que no me permite tomar materias y quería saber si ya puedo elegir, de ser así para que por favor me ayude para poder imprimir el formulario e ir a cancelar una materia de segunda matricula que tengo o necesariamente tengo que presentarme en la universidad para realizar el trámite.
+Por su ayuda, muchas gracias 
+Att: Mario Salazar
 
-if a >= 1 or a is not 5:
-    print("a")
+    
+    """
