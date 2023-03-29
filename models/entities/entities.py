@@ -18,12 +18,12 @@ class Entity:
                             "id_gender": user[0],
                             "gender_name": user[1]
                         },
-                        "id_person": user[3],
-                        "card_id_person": user[4],
-                        "first_name": user[5],
-                        "last_name": user[6],
-                        "phone": user[7],
-                        "address": user[8],
+                        "id_person": user[2],
+                        "card_id_person": user[3],
+                        "first_name": user[4],
+                        "last_name": user[5],
+                        "phone": user[6],
+                        "address": user[7],
                         "date_born": user[9].strftime('%d/%m/%Y')
                     },
                     "id_user": user[10],
