@@ -74,3 +74,20 @@ update users set rol_user = 1;
 
 alter table users 
 add constraint fk_rol_users foreign key(rol_user) references rol_user(id_rol);
+
+/*
+
+conda create -n nombreenv python=x.x
+source activate nombreenv
+conda env list
+Para instalar paquetes dentro de nuestro entorno virtual podemos hacerlo mediante pip o con el instalador de anaconda.
+
+pip install nombredelpaquete
+o bien
+
+conda install nombredelpaquete
+De igual manera podemos ver los paquetes y la versión que tiene instalado nuestro entorno
+
+conda list -n nombreenv
+
+*/

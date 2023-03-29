@@ -5,13 +5,11 @@ Created on Fri Mar  3 15:53:57 2023
 @author: Mario
 """
 
+
 class Entity:
 
-    # * Important
-    # ! Danger
-    # ? Should
     @classmethod
-    def entityUser(self, user)->dict:
+    def entityUser(self, user) -> dict:
         if dict:
             return {
                 "user": {
@@ -20,12 +18,12 @@ class Entity:
                             "id_gender": user[0],
                             "gender_name": user[1]
                         },
-                        "id_person": user[3],
-                        "card_id_person": user[4],
-                        "first_name": user[5],
-                        "last_name": user[6],
-                        "phone": user[7],
-                        "address": user[8],
+                        "id_person": user[2],
+                        "card_id_person": user[3],
+                        "first_name": user[4],
+                        "last_name": user[5],
+                        "phone": user[6],
+                        "address": user[7],
                         "date_born": user[9].strftime('%d/%m/%Y')
                     },
                     "id_user": user[10],
@@ -44,8 +42,9 @@ class Entity:
         else:
             return None
 
-
-    # TODO
     @classmethod
-    def ListUsers(self, users)->list:
+    def ListUsers(self, users) -> list:
         return [self.entityUser(user) for user in users]
+
+
+link = "https://cloud2.utn.edu.ec/ords/f?p=128%3ALOGIN_DESKTOP&fbclid=IwAR3lUpdzdn0b8J31pDg3CtOw8VkRmDdDgNM4VyqdNvhOOLBmiHEccGwGU1I"

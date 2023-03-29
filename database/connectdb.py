@@ -11,7 +11,8 @@ from decouple import config
 
 def connect_postgresql(hostname, dbname, username, password):
     try:
-        conn_query = "host = '" + hostname + "' dbname = '" + dbname + "' user= '" + username + "' password= '" + password + "' port = '5432'"
+        conn_query = "host = '" + hostname + "' dbname = '" + dbname + \
+            "' user= '" + username + "' password= '" + password + "' port = '15045'"
         conn_post = conn.connect(conn_query)
         print("Database connect successfully to PostgreSQL")
         return conn_post
@@ -19,14 +20,15 @@ def connect_postgresql(hostname, dbname, username, password):
         print("Ocurrió un error al conectar a PostgreSQL: ", e)
         raise Exception(e)
 
+
 def get_connection():
     try:
         connection = connect_postgresql(
-            config('HOSTNAME'),
+            config('HOST_NAME'),
             config('DATABASE'),
             config('USER_NAME'),
             config('PASSWORD')
         )
         return connection
     except Exception as ex:
-        raise ex
+        raise Exception(ex)
