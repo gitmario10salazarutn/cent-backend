@@ -99,59 +99,64 @@ class Model:
     @classmethod
     def create_user(self, data):
         try:
-            with connection.cursor() as cursor:
-                f = datetime.datetime.now()
-                fecha = "{0}/{1}/{2}".format(f.month, f.day, f.year)
-                cursor.execute("insert into person(card_id_person, first_name, last_name, phone, address, gender, date_born) values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}') returning id_person;".format(
-                    data['card_id_person'], data['first_name'], data['last_name'], data['phone'], data['address'], data['gender'], data['date_born']))
-                id_person = cursor.fetchone()[0]
-                print(id_person)
-                iduser = ''
-                if int(data['id_rol']) == 1:
-                    iduser = 'PRE-' + data['card_id_person']
-                if int(data['id_rol']) == 2:
-                    iduser = 'EMP-' + data['card_id_person']
-                if int(data['id_rol']) == 3:
-                    iduser = 'SEC-' + data['card_id_person']
-                if int(data['id_rol']) == 4:
-                    iduser = 'CUS-' + data['card_id_person']
-                # fecha = datetime.strptime(data['user_fecha'], '%d/%m/%Y')
-                password = data['password']
-                hashed = generate_password_hash(password)
-                q = "INSERT INTO users(user_name, email, password, login_code, user_state, register_date,person, rol_user) values('{0}', '{1}', '{2}','{3}', '{4}', '{5}', '{6}', '{7}')".format(
-                    iduser, data['email'], hashed, '0', 'True', fecha, id_person, data['id_rol'])
-                print(q)
-                cursor.execute(
-                    "INSERT INTO users(user_name, email, password, login_code, user_state, register_date,person, rol_user) values('{0}', '{1}', '{2}','{3}', '{4}', '{5}', '{6}', '{7}')".format(iduser, data['email'], hashed, '0', 'True', fecha, id_person, data['id_rol']))
-                """
-                if int(data['rol_idrol']) == 1:
+            us = self.get_userbyemail(
+                data['email']) or self.get_userbyusername('ADM-{0}'.format(data['card_id_person'])) or self.get_userbyusername('PRE-{0}'.format(data['card_id_person'])) or self.get_userbyusername('EMP-{0}'.format(data['card_id_person'])) or self.get_userbyusername('SEC-{0}'.format(data['card_id_person'])) or self.get_userbyusername('CUS-{0}'.format(data['card_id_person']))
+            if us:
+                return -1
+            else:
+                with connection.cursor() as cursor:
+                    f = datetime.datetime.now()
+                    fecha = "{0}/{1}/{2}".format(f.month, f.day, f.year)
+                    cursor.execute("insert into person(card_id_person, first_name, last_name, phone, address, gender, date_born) values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}') returning id_person;".format(
+                        data['card_id_person'], data['first_name'], data['last_name'], data['phone'], data['address'], data['gender'], data['date_born']))
+                    id_person = cursor.fetchone()[0]
+                    print(id_person)
+                    iduser = ''
+                    if int(data['id_rol']) == 1:
+                        iduser = 'PRE-' + data['card_id_person']
+                    if int(data['id_rol']) == 2:
+                        iduser = 'EMP-' + data['card_id_person']
+                    if int(data['id_rol']) == 3:
+                        iduser = 'SEC-' + data['card_id_person']
+                    if int(data['id_rol']) == 4:
+                        iduser = 'CUS-' + data['card_id_person']
+                    # fecha = datetime.strptime(data['user_fecha'], '%d/%m/%Y')
+                    password = data['password']
+                    hashed = generate_password_hash(password)
+                    q = "INSERT INTO users(user_name, email, password, login_code, user_state, register_date,person, rol_user) values('{0}', '{1}', '{2}','{3}', '{4}', '{5}', '{6}', '{7}')".format(
+                        iduser, data['email'], hashed, '0', 'True', fecha, id_person, data['id_rol'])
+                    print(q)
                     cursor.execute(
-                        "INSERT INTO presidente(user_idusuario) values('{0}')".format(iduser))
-                if int(data['rol_idrol']) == 2:
-                    cursor.execute(
-                        "INSERT INTO secretario(user_idusuario) values('{0}')".format(iduser))
-                if int(data['rol_idrol']) == 3:
-                    cursor.execute(
-                        "INSERT INTO tesorero(user_idusuario) values('{0}')".format(iduser))
-                if int(data['rol_idrol']) == 4:
-                    cursor.execute(
-                        "INSERT INTO condomino(user_idusuario) values('{0}')".format(iduser))
-                """
-                rows_affects = cursor.rowcount
-                connection.commit()
-                """
-                da = {
-                    "user_idusuario": iduser,
-                    "user_password": hashed,
-                    "user_estado": 0,
-                    "user_email": data['pers_email']
-                }
-                """
-                if rows_affects > 0:
-                    # print(self.create_users(da))
-                    user = self.get_userbyusername(iduser)
-                    return user
-                else:
-                    return {'message': 'Error, Insert user failed!'}
+                        "INSERT INTO users(user_name, email, password, login_code, user_state, register_date,person, rol_user) values('{0}', '{1}', '{2}','{3}', '{4}', '{5}', '{6}', '{7}')".format(iduser, data['email'], hashed, '0', 'True', fecha, id_person, data['id_rol']))
+                    """
+                    if int(data['rol_idrol']) == 1:
+                        cursor.execute(
+                            "INSERT INTO presidente(user_idusuario) values('{0}')".format(iduser))
+                    if int(data['rol_idrol']) == 2:
+                        cursor.execute(
+                            "INSERT INTO secretario(user_idusuario) values('{0}')".format(iduser))
+                    if int(data['rol_idrol']) == 3:
+                        cursor.execute(
+                            "INSERT INTO tesorero(user_idusuario) values('{0}')".format(iduser))
+                    if int(data['rol_idrol']) == 4:
+                        cursor.execute(
+                            "INSERT INTO condomino(user_idusuario) values('{0}')".format(iduser))
+                    """
+                    rows_affects = cursor.rowcount
+                    connection.commit()
+                    """
+                    da = {
+                        "user_idusuario": iduser,
+                        "user_password": hashed,
+                        "user_estado": 0,
+                        "user_email": data['pers_email']
+                    }
+                    """
+                    if rows_affects > 0:
+                        # print(self.create_users(da))
+                        user = self.get_userbyusername(iduser)
+                        return user
+                    else:
+                        return {'message': 'Error, Insert user failed!'}
         except Exception as ex:
             raise Exception(ex)

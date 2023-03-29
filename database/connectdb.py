@@ -12,7 +12,7 @@ from decouple import config
 def connect_postgresql(hostname, dbname, username, password):
     try:
         conn_query = "host = '" + hostname + "' dbname = '" + dbname + \
-            "' user= '" + username + "' password= '" + password + "' port = '5432'"
+            "' user= '" + username + "' password= '" + password + "' port = '15045'"
         conn_post = conn.connect(conn_query)
         print("Database connect successfully to PostgreSQL")
         return conn_post

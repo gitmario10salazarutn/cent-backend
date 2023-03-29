@@ -120,6 +120,11 @@ def create_user():
         usuario = model.Model.create_user(data)
         if usuario is None:
             return jsonify({'message': 'Data not found!'}), 404
+        elif usuario == -1:
+            return jsonify({
+                'message': 'User exist on database!',
+                'token': None
+            })
         else:
             return jsonify({
                 'message': 'User created successfully!',
