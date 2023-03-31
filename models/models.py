@@ -20,7 +20,7 @@ class Model:
         try:
             cursor = connection.cursor()
             cursor.execute(
-                "select * from gender g inner join person p on p.gender = g.id_gender inner join users u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user;")
+                "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user;")
             rows = cursor.fetchall()
             if rows:
                 return entity.Entity.ListUsers(rows)
@@ -34,7 +34,7 @@ class Model:
         try:
             cursor = connection.cursor()
             cursor.execute(
-                "select * from gender g inner join person p on p.gender = g.id_gender inner join users u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.user_name = '{0}';".format(username))
+                "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.user_name = '{0}';".format(username))
             row = cursor.fetchone()
             if row:
                 return entity.Entity.entityUser(row)
@@ -48,7 +48,7 @@ class Model:
         try:
             cursor = connection.cursor()
             cursor.execute(
-                "select * from gender g inner join person p on p.gender = g.id_gender inner join users u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.email = '{0}';".format(email))
+                "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.email = '{0}';".format(email))
             row = cursor.fetchone()
             if row:
                 return entity.Entity.entityUser(row)
@@ -84,7 +84,7 @@ class Model:
                     hash_pwd = generate_password_hash(data['new_password'])
                     if check_password_hash(hash_pwd, data['confirm_password']):
                         cursor = connection.cursor()
-                        cursor.execute("update users set password = '{0}' where id_user  = {1};".format(
+                        cursor.execute("update users_centenario set password = '{0}' where id_user  = {1};".format(
                             hash_pwd, user.get('user')['id_user']))
                         connection.commit()
                         rows_affect = cursor.rowcount
@@ -123,11 +123,9 @@ class Model:
                     # fecha = datetime.strptime(data['user_fecha'], '%d/%m/%Y')
                     password = data['password']
                     hashed = generate_password_hash(password)
-                    q = "INSERT INTO users(user_name, email, password, login_code, user_state, register_date,person, rol_user) values('{0}', '{1}', '{2}','{3}', '{4}', '{5}', '{6}', '{7}')".format(
+                    query = "INSERT INTO users_centenario(user_name, email, password, login_code, user_state, register_date,person, rol_user, user_delete) values('{0}', '{1}', '{2}','{3}', '{4}', '{5}', '{6}', '{7}', 'True')".format(
                         iduser, data['email'], hashed, '0', 'True', fecha, id_person, data['id_rol'])
-                    print(q)
-                    cursor.execute(
-                        "INSERT INTO users(user_name, email, password, login_code, user_state, register_date,person, rol_user) values('{0}', '{1}', '{2}','{3}', '{4}', '{5}', '{6}', '{7}')".format(iduser, data['email'], hashed, '0', 'True', fecha, id_person, data['id_rol']))
+                    cursor.execute(query)
                     """
                     if int(data['rol_idrol']) == 1:
                         cursor.execute(
