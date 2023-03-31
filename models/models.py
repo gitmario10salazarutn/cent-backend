@@ -20,7 +20,7 @@ class Model:
         try:
             cursor = connection.cursor()
             cursor.execute(
-                "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user;")
+                "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user; where u.user_delete = 'True';")
             rows = cursor.fetchall()
             if rows:
                 return entity.Entity.ListUsers(rows)
