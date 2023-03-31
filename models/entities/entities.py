@@ -34,8 +34,8 @@ class Entity:
                     "user_state": user[15],
                     "register_date": user[16].strftime('%d/%m/%Y'),
                     "rol_user": {
-                        "id_rol": user[19],
-                        "rol_name": user[20]
+                        "id_rol": user[20],
+                        "rol_name": user[21]
                     },
                 }
             }
