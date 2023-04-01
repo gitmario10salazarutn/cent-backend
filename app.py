@@ -47,6 +47,24 @@ def delete_user(id):
         return jsonify({"message": "Error {0}".format(ex)})
 
 
+@app.route('/users/setenable_user/<id>', methods=['POST'])
+def setenable_user(id):
+    try:
+        row_affect = model.Model.setenable_user(id=id)
+        if row_affect == 1:
+            return jsonify({
+                'message': 'Change user state Successfully!',
+                'token': row_affect
+            })
+        else:
+            return jsonify({
+                'message': 'Change user state failed!',
+                'token': row_affect
+            })
+    except Exception as ex:
+        return jsonify({"message": "Error {0}".format(ex)})
+
+
 @app.route('/users/get_users', methods=['GET'])
 def get_users():
     try:

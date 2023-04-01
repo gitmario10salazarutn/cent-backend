@@ -31,6 +31,26 @@ class Model:
             raise Exception(ex)
 
     @classmethod
+    def setenable_user(self, id):
+        try:
+            with connection.cursor() as cursor:
+                user = self.get_userbyusername(id)
+                if user:
+                    user_state = user.get('user')['user_state']
+                    cursor.execute(
+                        "update users_centenario set user_state = '{0}' where user_name = '{1}'".format(not user_state, id))
+                    row_affects = cursor.rowcount
+                    connection.commit()
+                    if row_affects > 0:
+                        return 1
+                    else:
+                        return 0
+                else:
+                    return -1
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
     def get_users(self):
         try:
             cursor = connection.cursor()
