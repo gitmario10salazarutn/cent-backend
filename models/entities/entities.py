@@ -37,6 +37,7 @@ class Entity:
                         "id_rol": user[20],
                         "rol_name": user[21]
                     },
+                    "user_delete": user[19]
                 }
             }
         else:

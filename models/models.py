@@ -16,6 +16,21 @@ connection = conn.get_connection()
 class Model:
 
     @classmethod
+    def delete_user(self, id):
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "update users_centenario set user_delete = 'False' where user_name = '{0}'".format(id))
+                row_affects = cursor.rowcount
+                connection.commit()
+                if row_affects > 0:
+                    return 1
+                else:
+                    return 0
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
     def get_users(self):
         try:
             cursor = connection.cursor()
@@ -34,7 +49,7 @@ class Model:
         try:
             cursor = connection.cursor()
             cursor.execute(
-                "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.user_name = '{0}';".format(username))
+                "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.user_name = '{0}' and u.user_delete = 'True';".format(username))
             row = cursor.fetchone()
             if row:
                 return entity.Entity.entityUser(row)
@@ -48,7 +63,7 @@ class Model:
         try:
             cursor = connection.cursor()
             cursor.execute(
-                "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.email = '{0}';".format(email))
+                "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.email = '{0}' and u.user_delete = 'True';;".format(email))
             row = cursor.fetchone()
             if row:
                 return entity.Entity.entityUser(row)

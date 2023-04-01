@@ -29,6 +29,24 @@ def Page_Not_Found(error):
     return '<h1>Page Not Found</h1>', 404
 
 
+@app.route('/users/delete_user/<id>', methods=['DELETE'])
+def delete_user(id):
+    try:
+        row_affect = model.Model.delete_user(id=id)
+        if row_affect == 1:
+            return jsonify({
+                'message': 'Delete user Successfully!',
+                'token': row_affect
+            })
+        else:
+            return jsonify({
+                'message': 'Delete user failed!',
+                'token': row_affect
+            })
+    except Exception as ex:
+        return jsonify({"message": "Error {0}".format(ex)})
+
+
 @app.route('/users/get_users', methods=['GET'])
 def get_users():
     try:
@@ -46,9 +64,15 @@ def get_userbyusername(username):
     try:
         user = model.Model.get_userbyusername(username=username)
         if user:
-            return user
+            return jsonify({
+                'message': 'User found Successfully!',
+                'token': user
+            })
         else:
-            return [None]
+            return jsonify({
+                'message': 'User not found!',
+                'token': None
+            })
     except Exception as ex:
         return jsonify({'message': 'Error {0}'.format(ex)}), 500
 
@@ -59,9 +83,15 @@ def get_userbyemail(email):
     try:
         user = model.Model.get_userbyemail(email=email)
         if user:
-            return user
+            return jsonify({
+                'message': 'User found Successfully!',
+                'token': user
+            })
         else:
-            return [None]
+            return jsonify({
+                'message': 'User not found!',
+                'token': None
+            })
     except Exception as ex:
         return jsonify({'message': 'Error {0}'.format(ex)}), 500
 
