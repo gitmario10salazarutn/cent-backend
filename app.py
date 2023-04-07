@@ -167,7 +167,7 @@ def create_user():
         data = request.json
         usuario = model.Model.create_user(data)
         if usuario is None:
-            return jsonify({'message': 'Data not found!'}), 404
+            return jsonify({'message': 'Data not found!', 'token': None}), 404
         elif usuario == -1:
             return jsonify({
                 'message': 'User exist on database!',
@@ -180,6 +180,28 @@ def create_user():
             })
     except Exception as ex:
         return jsonify({'message': 'Error {0}'.format(ex)}), 500
+
+
+@app.route('/users/update_user/<id>', methods=['POST'])
+def update_user(id):
+    try:
+        data = request.json
+        user = model.Model.update_user(data=data, id_user=id)
+        print(user)
+        if user is None:
+            return jsonify({'message': 'Data not found!', 'token': None}), 404
+        elif user == -1:
+            return jsonify({'message': 'User not found!', 'token': None})
+        elif user == -2:
+            return jsonify({'message': 'User with email exist on database!', 'token': None})
+        else:
+            return jsonify({
+                'message': 'User created successfully!',
+                'token': user
+            })
+    except Exception as ex:
+        return jsonify({'error': 'Error {0}'.format(ex),
+                        'message': 'Card id or email exist on database!'}), 500
 
 
 @app.route('/')

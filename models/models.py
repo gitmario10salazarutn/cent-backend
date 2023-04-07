@@ -10,14 +10,13 @@ from database import connectdb as conn
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 
-connection = conn.get_connection()
-
 
 class Model:
 
     @classmethod
     def delete_user(self, id):
         try:
+            connection = conn.get_connection()
             with connection.cursor() as cursor:
                 cursor.execute(
                     "update users_centenario set user_delete = 'False' where user_name = '{0}'".format(id))
@@ -33,6 +32,7 @@ class Model:
     @classmethod
     def setenable_user(self, id):
         try:
+            connection = conn.get_connection()
             with connection.cursor() as cursor:
                 user = self.get_userbyusername(id)
                 if user:
@@ -53,6 +53,7 @@ class Model:
     @classmethod
     def get_users(self):
         try:
+            connection = conn.get_connection()
             cursor = connection.cursor()
             cursor.execute(
                 "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.user_delete = 'True' order by p.first_name asc;")
@@ -67,6 +68,7 @@ class Model:
     @classmethod
     def get_userbyusername(self, username):
         try:
+            connection = conn.get_connection()
             cursor = connection.cursor()
             cursor.execute(
                 "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.user_name = '{0}' and u.user_delete = 'True';".format(username))
@@ -81,9 +83,25 @@ class Model:
     @classmethod
     def get_userbyemail(self, email):
         try:
+            connection = conn.get_connection()
             cursor = connection.cursor()
             cursor.execute(
                 "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.email = '{0}' and u.user_delete = 'True';;".format(email))
+            row = cursor.fetchone()
+            if row:
+                return entity.Entity.entityUser(row)
+            else:
+                return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def get_userbyid(self, id):
+        try:
+            connection = conn.get_connection()
+            cursor = connection.cursor()
+            cursor.execute(
+                "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.id_user = '{0}' and u.user_delete = 'True';;".format(id))
             row = cursor.fetchone()
             if row:
                 return entity.Entity.entityUser(row)
@@ -112,6 +130,7 @@ class Model:
     @classmethod
     def change_password(self, id, data):
         try:
+            connection = conn.get_connection()
             user = self.get_userbyemail(id) or self.get_userbyusername(id)
             rows_affect = -1
             if user:
@@ -139,13 +158,13 @@ class Model:
             if us:
                 return -1
             else:
+                connection = conn.get_connection()
                 with connection.cursor() as cursor:
                     f = datetime.datetime.now()
                     fecha = "{0}/{1}/{2}".format(f.month, f.day, f.year)
                     cursor.execute("insert into person(card_id_person, first_name, last_name, phone, address, gender, date_born) values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}') returning id_person;".format(
                         data['card_id_person'], data['first_name'], data['last_name'], data['phone'], data['address'], data['gender'], data['date_born']))
                     id_person = cursor.fetchone()[0]
-                    print(id_person)
                     iduser = ''
                     if int(data['id_rol']) == 1:
                         iduser = 'PRE-' + data['card_id_person']
@@ -191,5 +210,37 @@ class Model:
                         return user
                     else:
                         return {'message': 'Error, Insert user failed!'}
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def update_user(self, data, id_user):
+        try:
+            us = self.get_userbyid(id_user)
+            if us:
+                connection = conn.get_connection()
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "update person set first_name = '{0}', card_id_person = '{1}', last_name = '{2}', phone = '{3}', address = '{4}', gender = '{5}', date_born = '{6}' where card_id_person = '{7}';".format(data['first_name'], data['card_id_person'], data['last_name'], data['phone'], data['address'], data['gender'], data['date_born'], (us.get('user')['person'])['card_id_person']))
+                    username = ''
+                    if int(data['id_rol']) == 1:
+                        username = 'PRE-' + data['card_id_person']
+                    if int(data['id_rol']) == 2:
+                        username = 'EMP-' + data['card_id_person']
+                    if int(data['id_rol']) == 3:
+                        username = 'SEC-' + data['card_id_person']
+                    if int(data['id_rol']) == 4:
+                        username = 'CUS-' + data['card_id_person']
+                    cursor.execute(
+                        "update users_centenario set email = '{0}', rol_user = '{1}', user_name = '{2}' where id_user = '{3}';".format(data['email'], data['id_rol'], username, id_user))
+                    connection.commit()
+                    row_affects = cursor.rowcount
+                    if row_affects > 0:
+                        us = self.get_userbyid(id_user)
+                        return us
+                    else:
+                        return None
+            else:
+                return -1
         except Exception as ex:
             raise Exception(ex)
