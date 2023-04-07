@@ -70,7 +70,7 @@ def get_users():
     try:
         users = model.Model.get_users()
         if users is None:
-            return jsonify({'message': 'Data not found!'}), 404
+            return [None]
         else:
             return users
     except Exception as ex:
