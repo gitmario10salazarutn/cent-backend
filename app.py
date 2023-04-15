@@ -77,6 +77,30 @@ def get_users():
         return jsonify({'message': 'Error {0}'.format(ex)}), 500
 
 
+@app.route('/users/get_genders', methods=['GET'])
+def get_genders():
+    try:
+        genders = model.Model.get_genders()
+        if genders is None:
+            return [None]
+        else:
+            return genders
+    except Exception as ex:
+        return jsonify({'message': 'Error {0}'.format(ex)}), 500
+
+
+@app.route('/users/get_rols', methods=['GET'])
+def get_rols():
+    try:
+        rols = model.Model.get_rols()
+        if rols is None:
+            return [None]
+        else:
+            return rols
+    except Exception as ex:
+        return jsonify({'message': 'Error {0}'.format(ex)}), 500
+
+
 @app.route('/users/get_userbyusername/<username>', methods=['GET'])
 def get_userbyusername(username):
     try:

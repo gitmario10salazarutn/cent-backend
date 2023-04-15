@@ -51,6 +51,34 @@ class Model:
             raise Exception(ex)
 
     @classmethod
+    def get_genders(self):
+        try:
+            connection = conn.get_connection()
+            cursor = connection.cursor()
+            cursor.execute("select * from gender order by id_gender asc;")
+            rows = cursor.fetchall()
+            if rows:
+                return entity.Entity.genderList(rows)
+            else:
+                return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def get_rols(self):
+        try:
+            connection = conn.get_connection()
+            cursor = connection.cursor()
+            cursor.execute("select * from rol_user order by id_rol asc;")
+            rows = cursor.fetchall()
+            if rows:
+                return entity.Entity.rolList(rows)
+            else:
+                return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
     def get_users(self):
         try:
             connection = conn.get_connection()

@@ -47,6 +47,34 @@ class Entity:
     def ListUsers(self, users) -> list:
         return [self.entityUser(user) for user in users]
 
+    @classmethod
+    def genderEntity(self, gender) -> dict:
+        if gender:
+            return {
+                "id_gender": gender[0],
+                "gender_name": gender[1]
+            }
+        else:
+            return None
+
+    @classmethod
+    def genderList(self, genders) -> list:
+        return [self.genderEntity(gender) for gender in genders]
+
+    @classmethod
+    def rolEntity(self, rol) -> dict:
+        if rol:
+            return {
+                "id_rol": rol[0],
+                "rol_name": rol[1]
+            }
+        else:
+            return None
+
+    @classmethod
+    def rolList(self, rols) -> list:
+        return [self.rolEntity(rol) for rol in rols]
+
 
 link = "https://cloud2.utn.edu.ec/ords/f?p=128%3ALOGIN_DESKTOP&fbclid=IwAR3lUpdzdn0b8J31pDg3CtOw8VkRmDdDgNM4VyqdNvhOOLBmiHEccGwGU1I"
 
