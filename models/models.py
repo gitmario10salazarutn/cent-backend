@@ -84,7 +84,7 @@ class Model:
             connection = conn.get_connection()
             cursor = connection.cursor()
             cursor.execute(
-                "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.user_delete = 'True' order by p.first_name asc;")
+                "select * from gender g inner join person p on p.gender = g.id_gender inner join users_centenario u on u.person = p.id_person inner join rol_user ru on ru.id_rol = u.rol_user where u.user_delete = 'True' order by u.id_user desc;")
             rows = cursor.fetchall()
             if rows:
                 return entity.Entity.ListUsers(rows)
