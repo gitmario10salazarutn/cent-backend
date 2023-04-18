@@ -117,7 +117,7 @@ class Model:
                 "select * from language_type lt inner join language_programming lp on lt.id_langtype = lp.language_type inner join language_learned ll on ll.language_programming = lp.id_language inner join knowledge_level kl on kl.id_knowledge_level = ll.knowledge_level where ll.user_language = {0}".format(username))
             row = cursor.fetchone()
             if row:
-                return entity.Entity.languageLearnedEntity(row)
+                return entity.Entity.languageLearnedList(row)
             else:
                 return None
         except Exception as ex:
