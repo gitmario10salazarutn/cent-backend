@@ -62,6 +62,34 @@ class Entity:
         return [self.genderEntity(gender) for gender in genders]
 
     @classmethod
+    def languageLearnedEntity(self, data) -> dict:
+        if data:
+            return {
+                "id_langlearn": data[6],
+                "description": data[7],
+                "knowledge_level": {
+                    "id_knowledge_level": data[8],
+                    "name_levknowledge": data[12]
+                },
+                "language_programming": {
+                    "id_language": data[2],
+                    "language_name": data[3],
+                    "language_type": {
+                        "id_langtype": data[0],
+                        "langtype_name": data[1]
+                    },
+                    "image": data[5]
+                },
+                "user_language": data[10]
+            }
+        else:
+            return None
+
+    @classmethod
+    def languageLearnedList(self, languages) -> list:
+        return [self.languageLearnedEntity(lang) for lang in languages]
+
+    @classmethod
     def rolEntity(self, rol) -> dict:
         if rol:
             return {

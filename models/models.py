@@ -94,6 +94,36 @@ class Model:
             raise Exception(ex)
 
     @classmethod
+    def get_languages(self):
+        try:
+            connection = conn.get_connection()
+            cursor = connection.cursor()
+            cursor.execute(
+                "select * from language_type lt inner join language_programming lp on lt.id_langtype = lp.language_type inner join language_learned ll on ll.language_programming = lp.id_language inner join knowledge_level kl on kl.id_knowledge_level = ll.knowledge_level;")
+            rows = cursor.fetchall()
+            if rows:
+                return entity.Entity.languageLearnedList(rows)
+            else:
+                return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def get_languagesbyuser(self, username):
+        try:
+            connection = conn.get_connection()
+            cursor = connection.cursor()
+            cursor.execute(
+                "select * from language_type lt inner join language_programming lp on lt.id_langtype = lp.language_type inner join language_learned ll on ll.language_programming = lp.id_language inner join knowledge_level kl on kl.id_knowledge_level = ll.knowledge_level where ll.user_language = {0}".format(username))
+            row = cursor.fetchone()
+            if row:
+                return entity.Entity.languageLearnedEntity(row)
+            else:
+                return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
     def get_userbyusername(self, username):
         try:
             connection = conn.get_connection()

@@ -77,6 +77,36 @@ def get_users():
         return jsonify({'message': 'Error {0}'.format(ex)}), 500
 
 
+@app.route('/users/get_languages', methods=['GET'])
+def get_languages():
+    try:
+        languages = model.Model.get_languages()
+        if languages is None:
+            return [None]
+        else:
+            return languages
+    except Exception as ex:
+        return jsonify({'message': 'Error {0}'.format(ex)}), 500
+
+
+@app.route('/users/get_languagebyuser/<username>', methods=['GET'])
+def get_languagebyuser(username):
+    try:
+        language = model.Model.get_languagesbyuser(username=username)
+        if language:
+            return jsonify({
+                'message': 'Languages found Successfully!',
+                'token': language
+            })
+        else:
+            return jsonify({
+                'message': 'Language not found!',
+                'token': None
+            })
+    except Exception as ex:
+        return jsonify({'message': 'Error {0}'.format(ex)}), 500
+
+
 @app.route('/users/get_genders', methods=['GET'])
 def get_genders():
     try:
