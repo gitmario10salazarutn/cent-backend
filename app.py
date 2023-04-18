@@ -96,7 +96,7 @@ def get_languagebyuser(username):
         if language:
             return jsonify({
                 'message': 'Languages found Successfully!',
-                'token': language
+                'token': [language]
             })
         else:
             return jsonify({
