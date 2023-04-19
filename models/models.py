@@ -79,6 +79,21 @@ class Model:
             raise Exception(ex)
 
     @classmethod
+    def get_knowledgwlevels(self):
+        try:
+            connection = conn.get_connection()
+            cursor = connection.cursor()
+            cursor.execute(
+                "select * from knowledge_level kl order by kl.id_knowledge_level asc;")
+            rows = cursor.fetchall()
+            if rows:
+                return entity.Entity.knowledgeLevelList(rows)
+            else:
+                return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
     def get_users(self):
         try:
             connection = conn.get_connection()
@@ -118,6 +133,79 @@ class Model:
             row = cursor.fetchall()
             if row:
                 return entity.Entity.languageLearnedList(row)
+            else:
+                return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def get_languagebyid(self, id):
+        try:
+            connection = conn.get_connection()
+            cursor = connection.cursor()
+            cursor.execute(
+                "select * from language_type lt inner join language_programming lp on lt.id_langtype = lp.language_type inner join language_learned ll on ll.language_programming = lp.id_language inner join knowledge_level kl on kl.id_knowledge_level = ll.knowledge_level where ll.id_langlearn = {0};".format(id))
+            row = cursor.fetchone()
+            if row:
+                return entity.Entity.languageLearnedEntity(row)
+            else:
+                return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def get_languagebylu(self, language, user):
+        try:
+            connection = conn.get_connection()
+            cursor = connection.cursor()
+            cursor.execute(
+                "select * from language_type lt inner join language_programming lp on lt.id_langtype = lp.language_type inner join language_learned ll on ll.language_programming = lp.id_language inner join knowledge_level kl on kl.id_knowledge_level = ll.knowledge_level where ll.language_programming = {0} and ll.user_language = {1};".format(language, user))
+            row = cursor.fetchone()
+            if row:
+                return entity.Entity.languageLearnedEntity(row)
+            else:
+                return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def create_language(self, data):
+        try:
+            us = self.get_languagebylu(
+                data['language_programming'], data['user_language'])
+            if us:
+                return -1
+            else:
+                connection = conn.get_connection()
+                with connection.cursor() as cursor:
+                    cursor.execute("insert into language_learned (description, knowledge_level, language_programming, user_language) values('{0}', {1}, {2}, {3}) returning id_langlearn;".format(
+                        data['description'], data['knowledge_level'], data['language_programming'], data['user_language']))
+                    id = cursor.fetchone()[0]
+                    rows_affects = cursor.rowcount
+                    connection.commit()
+                    if rows_affects > 0:
+                        user = self.get_languagebyid(id)
+                        return user
+                    else:
+                        return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def update_languagelearn(self, id, data):
+        try:
+            connection = conn.get_connection()
+            language = self.get_languagebyid(id)
+            if language:
+                cursor = connection.cursor()
+                cursor.execute("update language_learned set description = '{0}', knowledge_level = {1} where id_langlearn = {2};".format(
+                    data['description'], data['knowledge_level'], id))
+                connection.commit()
+                rows_affect = cursor.rowcount
+                if rows_affect > 0:
+                    return self.get_languagebyid(id)
+                else:
+                    return 0
             else:
                 return None
         except Exception as ex:
@@ -232,38 +320,14 @@ class Model:
                         iduser = 'SEC-' + data['card_id_person']
                     if int(data['id_rol']) == 4:
                         iduser = 'CUS-' + data['card_id_person']
-                    # fecha = datetime.strptime(data['user_fecha'], '%d/%m/%Y')
                     password = data['password']
                     hashed = generate_password_hash(password)
                     query = "INSERT INTO users_centenario(user_name, email, password, login_code, user_state, register_date,person, rol_user, user_delete) values('{0}', '{1}', '{2}','{3}', '{4}', '{5}', '{6}', '{7}', 'True')".format(
                         iduser, data['email'], hashed, '0', 'True', fecha, id_person, data['id_rol'])
                     cursor.execute(query)
-                    """
-                    if int(data['rol_idrol']) == 1:
-                        cursor.execute(
-                            "INSERT INTO presidente(user_idusuario) values('{0}')".format(iduser))
-                    if int(data['rol_idrol']) == 2:
-                        cursor.execute(
-                            "INSERT INTO secretario(user_idusuario) values('{0}')".format(iduser))
-                    if int(data['rol_idrol']) == 3:
-                        cursor.execute(
-                            "INSERT INTO tesorero(user_idusuario) values('{0}')".format(iduser))
-                    if int(data['rol_idrol']) == 4:
-                        cursor.execute(
-                            "INSERT INTO condomino(user_idusuario) values('{0}')".format(iduser))
-                    """
                     rows_affects = cursor.rowcount
                     connection.commit()
-                    """
-                    da = {
-                        "user_idusuario": iduser,
-                        "user_password": hashed,
-                        "user_estado": 0,
-                        "user_email": data['pers_email']
-                    }
-                    """
                     if rows_affects > 0:
-                        # print(self.create_users(da))
                         user = self.get_userbyusername(iduser)
                         return user
                     else:

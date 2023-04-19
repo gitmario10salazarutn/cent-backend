@@ -90,6 +90,20 @@ class Entity:
         return [self.languageLearnedEntity(lang) for lang in languages]
 
     @classmethod
+    def knowledgeLevelEntity(self, data) -> dict:
+        if data:
+            return {
+                "id_knowledge_level": data[0],
+                "name_levknowledge": data[1]
+            }
+        else:
+            return None
+
+    @classmethod
+    def knowledgeLevelList(self, rows) -> list:
+        return [self.knowledgeLevelEntity(a) for a in rows]
+
+    @classmethod
     def rolEntity(self, rol) -> dict:
         if rol:
             return {

@@ -119,6 +119,77 @@ def get_genders():
         return jsonify({'message': 'Error {0}'.format(ex)}), 500
 
 
+@app.route('/users/get_languagebyid/<id>', methods=['GET'])
+def get_languagebyid(id):
+    try:
+        language = model.Model.get_languagebyid(id=id)
+        if language:
+            return jsonify({
+                'message': 'Language found Successfully!',
+                'token': language
+            })
+        else:
+            return jsonify({
+                'message': 'Language not found!',
+                'token': None
+            })
+    except Exception as ex:
+        return jsonify({'message': 'Error {0}'.format(ex)}), 500
+
+
+@app.route('/users/create_language', methods=['POST'])
+def create_language():
+    try:
+        data = request.json
+        language = model.Model.create_language(data)
+        print(language)
+        if language is None:
+            return jsonify({'message': 'Insert language failed!', 'token': None}), 404
+        elif language == -1:
+            return jsonify({
+                'message': 'Language exist on database!',
+                'token': None
+            })
+        else:
+            return jsonify({
+                'message': 'Language created successfully!',
+                'token': language
+            })
+    except Exception as ex:
+        return jsonify({'message': 'Error {0}'.format(ex)}), 500
+
+
+@app.route('/users/update_languagelearn/<id>', methods=['POST'])
+def update_languagelearn(id):
+    try:
+        data = request.json
+        language = model.Model.update_languagelearn(id=id, data=data)
+        if language is None:
+            return jsonify({'message': 'Language not found!', 'token': None}), 404
+        elif language == 0:
+            return jsonify({'message': 'Update language failed!', 'token': None})
+        else:
+            return jsonify({
+                'message': 'Language Update successfully!',
+                'token': language
+            })
+    except Exception as ex:
+        return jsonify({'error': 'Error {0}'.format(ex),
+                        'message': 'Card id or email exist on database!'}), 500
+
+
+@app.route('/users/get_knowledgelevels', methods=['GET'])
+def get_knowledgelevels():
+    try:
+        kl = model.Model.get_knowledgwlevels()
+        if kl is None:
+            return [None]
+        else:
+            return kl
+    except Exception as ex:
+        return jsonify({'message': 'Error {0}'.format(ex)}), 500
+
+
 @app.route('/users/get_rols', methods=['GET'])
 def get_rols():
     try:
