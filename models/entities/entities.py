@@ -104,6 +104,25 @@ class Entity:
         return [self.knowledgeLevelEntity(a) for a in rows]
 
     @classmethod
+    def languageProgrammingEntity(self, data) -> dict:
+        if data:
+            return {
+                "id_language": data[0],
+                "language_name": data[1],
+                "language_type": {
+                    "id_langtype": data[2],
+                    "langtype_name": data[5]
+                },
+                "image": data[3]
+            }
+        else:
+            return None
+
+    @classmethod
+    def languageProgrammingList(self, rows) -> list:
+        return [self.languageProgrammingEntity(lt) for lt in rows]
+
+    @classmethod
     def rolEntity(self, rol) -> dict:
         if rol:
             return {

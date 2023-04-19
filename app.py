@@ -190,6 +190,18 @@ def get_knowledgelevels():
         return jsonify({'message': 'Error {0}'.format(ex)}), 500
 
 
+@app.route('/users/get_LanguagesProgramming', methods=['GET'])
+def get_LanguagesProgramming():
+    try:
+        kl = model.Model.get_LanguagesProgramming()
+        if kl is None:
+            return [None]
+        else:
+            return kl
+    except Exception as ex:
+        return jsonify({'message': 'Error {0}'.format(ex)}), 500
+
+
 @app.route('/users/get_rols', methods=['GET'])
 def get_rols():
     try:

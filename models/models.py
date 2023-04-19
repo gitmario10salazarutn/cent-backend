@@ -94,6 +94,21 @@ class Model:
             raise Exception(ex)
 
     @classmethod
+    def get_LanguagesProgramming(self):
+        try:
+            connection = conn.get_connection()
+            cursor = connection.cursor()
+            cursor.execute(
+                "select * from language_programming lp inner join language_type lt on lp.language_type = lt.id_langtype;")
+            rows = cursor.fetchall()
+            if rows:
+                return entity.Entity.languageProgrammingList(rows)
+            else:
+                return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
     def get_users(self):
         try:
             connection = conn.get_connection()
