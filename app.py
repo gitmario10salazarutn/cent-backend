@@ -301,7 +301,7 @@ def change_password(id):
         data = request.json
         row = model.Model.change_password(id=id, data=data)
         if row == 1:
-            return jsonify({'message': 'Change password successfully!',
+            return jsonify({'message': 'Change password',
                             'token': 1})
         elif row == 3:
             return jsonify({'message': 'Password incorrect!',
