@@ -47,6 +47,24 @@ def delete_user(id):
         return jsonify({"message": "Error {0}".format(ex)})
 
 
+@app.route('/users/delete_language/<id>', methods=['DELETE'])
+def delete_language(id):
+    try:
+        row_affect = model.Model.delete_language(id=id)
+        if row_affect == 1:
+            return jsonify({
+                'message': 'Delete language Successfully!',
+                'token': row_affect
+            })
+        else:
+            return jsonify({
+                'message': 'Delete language failed!',
+                'token': row_affect
+            })
+    except Exception as ex:
+        return jsonify({"message": "Error {0}".format(ex)})
+
+
 @app.route('/users/setenable_user/<id>', methods=['POST'])
 def setenable_user(id):
     try:

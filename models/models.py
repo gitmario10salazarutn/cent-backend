@@ -94,6 +94,22 @@ class Model:
             raise Exception(ex)
 
     @classmethod
+    def delete_language(self, id):
+        try:
+            connection = conn.get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "delete from language_learned where id_langlearn = {0}".format(id))
+                row_affects = cursor.rowcount
+                connection.commit()
+                if row_affects > 0:
+                    return 1
+                else:
+                    return 0
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
     def get_LanguagesProgramming(self):
         try:
             connection = conn.get_connection()
@@ -144,7 +160,7 @@ class Model:
             connection = conn.get_connection()
             cursor = connection.cursor()
             cursor.execute(
-                "select * from language_type lt inner join language_programming lp on lt.id_langtype = lp.language_type inner join language_learned ll on ll.language_programming = lp.id_language inner join knowledge_level kl on kl.id_knowledge_level = ll.knowledge_level where ll.user_language = {0}".format(username))
+                "select * from language_type lt inner join language_programming lp on lt.id_langtype = lp.language_type inner join language_learned ll on ll.language_programming = lp.id_language inner join knowledge_level kl on kl.id_knowledge_level = ll.knowledge_level where ll.user_language = {0} order by lt.id_langtype asc;".format(username))
             row = cursor.fetchall()
             if row:
                 return entity.Entity.languageLearnedList(row)
