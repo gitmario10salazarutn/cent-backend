@@ -301,15 +301,20 @@ def change_password(id):
         data = request.json
         row = model.Model.change_password(id=id, data=data)
         if row == 1:
-            return jsonify({'message': 'Change password successfully!'})
+            return jsonify({'message': 'Change password successfully!',
+                            'token': 1})
         elif row == 3:
-            return jsonify({'message': 'Password incorrect!'})
+            return jsonify({'message': 'Password incorrect!',
+                            'token': None})
         elif row == 2:
-            return jsonify({'message': 'Confirm password incorrect!'})
+            return jsonify({'message': 'Confirm password incorrect!',
+                            'token': None})
         elif row == 4:
-            return jsonify({'message': 'Enter a key different at the old password!'})
+            return jsonify({'message': 'Enter a key different at the old password!',
+                            'token': None})
         else:
-            return jsonify({'message': 'User not found!'})
+            return jsonify({'message': 'User not found!',
+                            'token': None})
     except Exception as ex:
         return jsonify({'message': 'Error {0}'.format(ex)}), 500
 
