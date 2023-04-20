@@ -204,6 +204,16 @@ insert into language_learned (description, knowledge_level, language_programming
 values('El CSS es lo que se llama un lenguaje de hojas de estilo en cascada y se utiliza para estilizar elementos escritos en un lenguaje de marcado como HTML. 
 Separa el contenido de la representación visual del sitio.', 5, 15, 24);
 
+
+insert into knowledge_level (id_knowledge_level, name_levknowledge) values(0, 'Zero level of knowledge');
+
+update knowledge_level set name_levknowledge = 'Basic knowledge level' where id_knowledge_level = 1;
+update knowledge_level set name_levknowledge = 'Intermediate knowledge level' where id_knowledge_level = 2;
+update knowledge_level set name_levknowledge = 'Advanced intermediate knowledge level' where id_knowledge_level = 3;
+update knowledge_level set name_levknowledge = 'Advanced level of knowledge' where id_knowledge_level = 4;
+update knowledge_level set name_levknowledge = 'Expert knowledge level' where id_knowledge_level = 5;
+
+
 select*from users_centenario uc ;
 
 
