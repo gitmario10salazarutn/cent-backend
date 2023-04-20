@@ -14,18 +14,22 @@ import datetime
 class Model:
 
     @classmethod
-    def delete_user(self, id):
+    def delete_user(self, id, data):
         try:
             connection = conn.get_connection()
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    "update users_centenario set user_delete = 'False' where user_name = '{0}'".format(id))
-                row_affects = cursor.rowcount
-                connection.commit()
-                if row_affects > 0:
-                    return 1
-                else:
-                    return 0
+            user = self.get_userbyusername(id)
+            if check_password_hash(user.get('user')['password'], data['password']):
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "update users_centenario set user_delete = 'False' where user_name = '{0}'".format(id))
+                    row_affects = cursor.rowcount
+                    connection.commit()
+                    if row_affects > 0:
+                        return 1
+                    else:
+                        return 0
+            else:
+                return -1
         except Exception as ex:
             raise Exception(ex)
 

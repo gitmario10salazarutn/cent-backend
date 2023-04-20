@@ -38,6 +38,11 @@ def delete_user(id):
                 'message': 'Delete user Successfully!',
                 'token': row_affect
             })
+        elif row_affect == -1:
+            return jsonify({
+                'message': 'Confirm password failed!',
+                'token': row_affect
+            })
         else:
             return jsonify({
                 'message': 'Delete user failed!',
