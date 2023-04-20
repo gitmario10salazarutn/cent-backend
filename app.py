@@ -306,6 +306,8 @@ def change_password(id):
             return jsonify({'message': 'Password incorrect!'})
         elif row == 2:
             return jsonify({'message': 'Confirm password incorrect!'})
+        elif row == 4:
+            return jsonify({'message': 'Enter a key different at the old password!'})
         else:
             return jsonify({'message': 'User not found!'})
     except Exception as ex:
