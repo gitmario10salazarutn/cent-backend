@@ -32,7 +32,8 @@ def Page_Not_Found(error):
 @app.route('/users/delete_user/<id>', methods=['DELETE'])
 def delete_user(id):
     try:
-        row_affect = model.Model.delete_user(id=id)
+        data = request.json
+        row_affect = model.Model.delete_user(id=id, data=data)
         if row_affect == 1:
             return jsonify({
                 'message': 'Delete user Successfully!',
