@@ -314,7 +314,7 @@ class Model:
                 if check_password_hash(user.get('user')['password'], data['lastpassword']):
                     hash_pwd = generate_password_hash(data['new_password'])
                     if check_password_hash(hash_pwd, data['rep_password']):
-                        if not check_password_hash(hash_pwd, data['new_password']):
+                        if not check_password_hash(user.get('user')['password'], data['new_password']):
                             cursor = connection.cursor()
                             cursor.execute("update users_centenario set password = '{0}' where id_user  = {1};".format(
                                 hash_pwd, user.get('user')['id_user']))
