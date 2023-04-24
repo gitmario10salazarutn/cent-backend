@@ -131,6 +131,96 @@ def get_languagebyuser(username):
         return jsonify({'message': 'Error {0}'.format(ex)}), 500
 
 
+@app.route('/users/get_educationbyid/<id>', methods=['GET'])
+def get_educationbyid(id):
+    try:
+        eduaction = model.Model.get_educationbyid(id=id)
+        if eduaction:
+            return jsonify({
+                'message': 'Education found Successfully!',
+                'token': eduaction
+            })
+        else:
+            return jsonify({
+                'message': 'Language not found!',
+                'token': None
+            })
+    except Exception as ex:
+        return jsonify({'message': 'Error {0}'.format(ex)}), 500
+
+
+@app.route('/users/get_educationbyuser/<id>', methods=['GET'])
+def get_educationbyuser(id):
+    try:
+        eduaction = model.Model.get_educationbyuser(username=id)
+        if eduaction:
+            return jsonify({
+                'message': 'Education found Successfully!',
+                'token': eduaction
+            })
+        else:
+            return jsonify({
+                'message': 'Language not found!',
+                'token': None
+            })
+    except Exception as ex:
+        return jsonify({'message': 'Error {0}'.format(ex)}), 500
+
+
+@app.route('/users/create_education', methods=['POST'])
+def create_education():
+    try:
+        data = request.json
+        education = model.Model.create_education(data)
+        print(education)
+        if education is None:
+            return jsonify({'message': 'Insert education failed!', 'token': None}), 404
+        else:
+            return jsonify({
+                'message': 'Education created successfully!',
+                'token': education
+            })
+    except Exception as ex:
+        return jsonify({'message': 'Error {0}'.format(ex)}), 500
+
+
+@app.route('/users/update_education/<id>', methods=['PUT'])
+def update_education(id):
+    try:
+        data = request.json
+        education = model.Model.update_education(id=id, data=data)
+        if education is None:
+            return jsonify({'message': 'Education not found!', 'token': None}), 404
+        elif education == 0:
+            return jsonify({'message': 'Update education failed!', 'token': None})
+        else:
+            return jsonify({
+                'message': 'Education Update successfully!',
+                'token': education
+            })
+    except Exception as ex:
+        return jsonify({'error': 'Error {0}'.format(ex),
+                        'message': 'Error!'}), 500
+
+
+@app.route('/users/delete_education/<id>', methods=['DELETE'])
+def delete_education(id):
+    try:
+        row_affect = model.Model.delete_education(id=id)
+        if row_affect == 1:
+            return jsonify({
+                'message': 'Delete education Successfully!',
+                'token': row_affect
+            })
+        else:
+            return jsonify({
+                'message': 'Delete education failed!',
+                'token': row_affect
+            })
+    except Exception as ex:
+        return jsonify({"message": "Error {0}".format(ex)})
+
+
 @app.route('/users/get_genders', methods=['GET'])
 def get_genders():
     try:

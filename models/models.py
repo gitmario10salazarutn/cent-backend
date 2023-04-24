@@ -174,6 +174,90 @@ class Model:
             raise Exception(ex)
 
     @classmethod
+    def get_educationbyid(self, id):
+        try:
+            connection = conn.get_connection()
+            cursor = connection.cursor()
+            cursor.execute(
+                "select*from education e where e.id_education = {0};".format(id))
+            row = cursor.fetchone()
+            if row:
+                return entity.Entity.educationEntity(row)
+            else:
+                return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def get_educationbyuser(self, username):
+        try:
+            connection = conn.get_connection()
+            cursor = connection.cursor()
+            cursor.execute(
+                "select*from education e where e.user_education = {0} order by e.id_education asc;".format(username))
+            row = cursor.fetchall()
+            if row:
+                return entity.Entity.educationList(row)
+            else:
+                return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def create_education(self, data):
+        try:
+            connection = conn.get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute("insert into education (institution, major, year_start, year_end, description, user_education) values ('{0}', '{1}', {2}, {3}, '{4}', {5}) returning id_education;".format(
+                    data['institution'], data['major'], data['year_start'], data['year_end'], data['description'], data['user_education']))
+                id = cursor.fetchone()[0]
+                rows_affects = cursor.rowcount
+                connection.commit()
+                if rows_affects > 0:
+                    e = self.get_educationbyid(id)
+                    return e
+                else:
+                    return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def update_education(self, id, data):
+        try:
+            connection = conn.get_connection()
+            e = self.get_educationbyid(id)
+            if e:
+                cursor = connection.cursor()
+                cursor.execute("update education set institution = '{0}', major = '{1}', year_start = {2}, year_end = {3}, description = '{4}', user_education = {5} where id_education = {6};".format(
+                    data['institution'], data['major'], data['year_start'], data['year_end'], data['description'], data['user_education'], id))
+                connection.commit()
+                rows_affect = cursor.rowcount
+                if rows_affect > 0:
+                    return self.get_educationbyid(id)
+                else:
+                    return 0
+            else:
+                return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def delete_education(self, id):
+        try:
+            connection = conn.get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "delete from education where id_education = {0}".format(id))
+                row_affects = cursor.rowcount
+                connection.commit()
+                if row_affects > 0:
+                    return 1
+                else:
+                    return 0
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
     def get_languagebyid(self, id):
         try:
             connection = conn.get_connection()

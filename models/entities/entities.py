@@ -133,6 +133,25 @@ class Entity:
             return None
 
     @classmethod
+    def educationEntity(self, data) -> dict:
+        if data:
+            return {
+                "id_education": data[0],
+                "institution": data[1],
+                "major": data[2],
+                "year_start": data[3],
+                "year_end": data[4],
+                "description": data[5],
+                "user_education": data[6]
+            }
+        else:
+            return None
+
+    @classmethod
+    def educationList(self, edu) -> list:
+        return [self.educationEntity(e) for e in edu]
+
+    @classmethod
     def rolList(self, rols) -> list:
         return [self.rolEntity(rol) for rol in rols]
 
