@@ -155,7 +155,7 @@ def get_educationbyuser(id):
         eduaction = model.Model.get_educationbyuser(username=id)
         if eduaction:
             return jsonify({
-                'message': 'Education found Successfully!',
+                'message': 'Education found Successfully!!',
                 'token': eduaction
             })
         else:
