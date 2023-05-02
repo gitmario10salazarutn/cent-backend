@@ -167,7 +167,7 @@ def get_educationbyuser(id):
         return jsonify({'message': 'Error {0}'.format(ex)}), 500
 
 
-@app.route('/users/create_education', methods=['POST'])
+@app.route('/users/create_educationl', methods=['POST'])
 def create_education():
     try:
         data = request.json
